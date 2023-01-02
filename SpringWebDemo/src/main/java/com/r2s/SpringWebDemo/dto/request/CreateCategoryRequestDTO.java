@@ -9,14 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserRequestDTO implements Serializable {
+public class CreateCategoryRequestDTO implements Serializable {
 
-    private String firstName;
-
-    private String lastName;
-
-    private String username;
-
-    private String password;
-
+    private String name;
 }

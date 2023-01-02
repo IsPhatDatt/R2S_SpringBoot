@@ -1,4 +1,4 @@
-package com.r2s.SpringWebDemo.dto.request;
+package com.r2s.SpringWebDemo.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,14 +9,14 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserRequestDTO implements Serializable {
+public class UserResponseDTO implements Serializable {
+
+    private Integer id;
 
     private String firstName;
 
     private String lastName;
 
     private String username;
-
-    private String password;
 
 }
