@@ -25,19 +25,6 @@ public class CategoryController implements Serializable {
     @GetMapping(value = "/get-all-category")
     public ResponseEntity getAllCategory(@RequestParam(value = "page", required = false) Integer page,
                                         @RequestParam(value = "size", required = false) Integer size) {
-//        CategoryResponseDTO virtualCategory1 = new CategoryResponseDTO(1,"Shoes");
-//        CategoryResponseDTO virtualCategory2 = new CategoryResponseDTO(2,"Watch");
-//        CategoryResponseDTO virtualCategory3 = new CategoryResponseDTO(3,"Jacket");
-//        CategoryResponseDTO virtualCategory4 = new CategoryResponseDTO(4,"Socks");
-//        CategoryResponseDTO virtualCategory5 = new CategoryResponseDTO(5,"Bag");
-
-
-//        List<CategoryResponseDTO> listCategoryResponseDTO = new ArrayList<>();
-//        listCategoryResponseDTO.add(virtualCategory1);
-//        listCategoryResponseDTO.add(virtualCategory2);
-//        listCategoryResponseDTO.add(virtualCategory3);
-//        listCategoryResponseDTO.add(virtualCategory4);
-//        listCategoryResponseDTO.add(virtualCategory5);
 
         PagingResponseDTO pagingCategoryResponseDTO = new PagingResponseDTO();
         pagingCategoryResponseDTO.setResponseObjectList(categoryService.getAllCategory(page, size));

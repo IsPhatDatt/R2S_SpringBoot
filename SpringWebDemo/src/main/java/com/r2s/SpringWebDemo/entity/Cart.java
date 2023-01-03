@@ -10,16 +10,13 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "\"ORDER\"")
-public class Order {
+@Entity(name = "CART")
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-
-    @Column(name = "TRANSPORTATION_FEE")
-    private Double transportationFee;
 
     @Column(name = "TOTAL_PRICE")
     private Double totalPrice;

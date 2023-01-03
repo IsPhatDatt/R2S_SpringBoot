@@ -49,19 +49,6 @@ public class UserController {
     @PutMapping("/{user-id}")
     public ResponseEntity updateUser(@PathVariable("user-id") Integer userId,
                                      @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
-//        StringBuilder response = new StringBuilder("Update User With Info: ");
-//        response.append("user-id: ").append(userId);
-//        response.append("name: ").append(updateUserRequestDTO.getName());
-//        response.append("email: ").append(updateUserRequestDTO.getEmail());
-//        UpdateUserResponseDTO response = new UpdateUserResponseDTO();
-//        response.setId(userId);
-//        response.setFirstName(updateUserRequestDTO.getFirstName());
-//        response.setLastName(updateUserRequestDTO.getLastName());
-//        response.setUsername(updateUserRequestDTO.getUsername());
-//
-//        UpdateUserListResponseDTO responseListUserDTO = new UpdateUserListResponseDTO();
-//        responseListUserDTO.setResponseDTOList(Collections.singletonList(response));
-        //Hàm Collections.singletonList(response) có nghĩa là trong list chỉ có 1 phần tử duy nhất là response
         UpdateUserResponseDTO response = this.userService.updateUser(userId, updateUserRequestDTO);
 
 
@@ -70,31 +57,8 @@ public class UserController {
 
     @DeleteMapping("/{user-id}")
     public ResponseEntity deleteUser(@PathVariable("user-id") Integer userId) {
-//        return ResponseEntity.ok("Delete success!");
         this.userService.deleteUser(userId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    //    @GetMapping(value = "/{user-id}")
-//    public ResponseEntity getAllUser(@PathVariable("user-id") String userId,
-//                                     @RequestParam(value = "page", required = false) Integer page,
-//                                     @RequestParam(value = "size", required = false) Integer size,
-//                                     @RequestParam(value = "sort", required = false) String sort) {
-//        StringBuilder response = new StringBuilder("Get All User: ");
-//        response.append("user-id: ").append(userId);
-//        response.append("page: ").append(page);
-//        response.append("size: ").append(size);
-//        response.append("sort: ").append(sort);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-//    @PostMapping
-//    public ResponseEntity insertUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
-//        String firstName = createUserRequestDTO.getFirstName();
-//        String lastName = createUserRequestDTO.getLastName();
-//        String phone = createUserRequestDTO.getPhone();
-//        StringBuilder stringBuilder = new StringBuilder();
-//        String response = stringBuilder.append(firstName).append(lastName).append(phone).toString();
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
 }
