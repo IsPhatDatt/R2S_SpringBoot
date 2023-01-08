@@ -9,14 +9,11 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserRequestDTO implements Serializable {
+public class UpdateProductRequestDTO implements Serializable {
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private Double price;
 
-    private String username;
-
-    private String password;
-
+    private Integer quantity;
 }

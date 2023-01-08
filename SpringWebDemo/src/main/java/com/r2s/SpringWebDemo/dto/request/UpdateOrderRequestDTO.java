@@ -9,8 +9,9 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateAddressRequestDTO implements Serializable {
+public class UpdateOrderRequestDTO implements Serializable {
 
-    private String addressFull;
+    private Double transportationFee;
 
+    private Double totalPrice;
 }

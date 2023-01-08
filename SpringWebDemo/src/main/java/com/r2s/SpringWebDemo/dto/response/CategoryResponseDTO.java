@@ -1,4 +1,4 @@
-package com.r2s.SpringWebDemo.dto.request;
+package com.r2s.SpringWebDemo.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,9 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateAddressRequestDTO implements Serializable {
+public class CategoryResponseDTO implements Serializable {
 
-    private String addressFull;
+    private Integer id;
 
+    private String name;
 }
