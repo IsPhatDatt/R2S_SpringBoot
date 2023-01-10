@@ -18,4 +18,6 @@ public class UpdateProductResponseDTO implements Serializable {
     private Double price;
 
     private Integer quantity;
+
+    private CategoryResponseDTO category;
 }

@@ -13,5 +13,13 @@ public class UpdateAddressResponseDTO implements Serializable {
 
     private Integer id;
 
-    private String addressFull;
+    private String apartmentNumber;
+
+    private String street;
+
+    private String ward;
+
+    private String district;
+
+    private String province;
 }

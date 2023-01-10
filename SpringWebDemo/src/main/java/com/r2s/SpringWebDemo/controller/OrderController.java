@@ -6,6 +6,7 @@ import com.r2s.SpringWebDemo.dto.response.*;
 import com.r2s.SpringWebDemo.service.CategoryService;
 import com.r2s.SpringWebDemo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,19 +21,17 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @GetMapping(value = "/get-all-order")
-    public ResponseEntity getAllOrder(@RequestParam(value = "page", required = false) Integer page,
-                                        @RequestParam(value = "size", required = false) Integer size) {
-        PagingResponseDTO pagingOrderResponseDTO = new PagingResponseDTO();
-        pagingOrderResponseDTO.setResponseObjectList(orderService.getAllOrder(page, size));
-        pagingOrderResponseDTO.setPage(page);
-        pagingOrderResponseDTO.setSize(size);
+    @GetMapping(value = "/get-all")
+    public ResponseEntity getAllOrder(Pageable pageable) {
 
-        return new ResponseEntity<>(pagingOrderResponseDTO, HttpStatus.OK);
+        PagingResponseDTO pagingResponseDTO = this.orderService.getAllOrder(pageable);
+
+        return new ResponseEntity<>(pagingResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{order-id}")
     public ResponseEntity getOrderById(@PathVariable("order-id") Integer orderId) {
+
         OrderResponseDTO orderResponseDTO = this.orderService.getOrderById(orderId);
 
         return new ResponseEntity<>(orderResponseDTO, HttpStatus.OK);
@@ -43,6 +42,13 @@ public class OrderController {
         OrderResponseDTO orderResponseDTO = this.orderService.createOrder(createOrderRequestDTO);
 
         return new ResponseEntity<>(orderResponseDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{order-id}")
+    public ResponseEntity deleteOrder(@PathVariable("order-id") Integer orderId) {
+        this.orderService.deleteOrderTemporarily(orderId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

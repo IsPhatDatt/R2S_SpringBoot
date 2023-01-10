@@ -2,19 +2,20 @@ package com.r2s.SpringWebDemo.service.impl;
 
 import com.r2s.SpringWebDemo.dto.request.CreateUserRequestDTO;
 import com.r2s.SpringWebDemo.dto.request.UpdateUserRequestDTO;
-import com.r2s.SpringWebDemo.dto.response.ProductResponseDTO;
-import com.r2s.SpringWebDemo.dto.response.UpdateProductResponseDTO;
-import com.r2s.SpringWebDemo.dto.response.UpdateUserResponseDTO;
-import com.r2s.SpringWebDemo.dto.response.UserResponseDTO;
-import com.r2s.SpringWebDemo.entity.Product;
+import com.r2s.SpringWebDemo.dto.response.*;
+import com.r2s.SpringWebDemo.entity.Category;
 import com.r2s.SpringWebDemo.entity.User;
-import com.r2s.SpringWebDemo.repository.ProductRepository;
 import com.r2s.SpringWebDemo.repository.UserRepository;
 import com.r2s.SpringWebDemo.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.r2s.SpringWebDemo.constants.Constants.*;
 
@@ -24,34 +25,36 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
-    @Override
-    public List<UserResponseDTO> getAllUser(Integer page, Integer size) {
-        List<UserResponseDTO> userResponseDTOList = new ArrayList<>();
-        List<User> users = userRepository.getAllUser(page, size);
-        for (User user : users) {
-            UserResponseDTO userResponseDTO = new UserResponseDTO();
-            userResponseDTO.setId(user.getId());
-            userResponseDTO.setFirstName(user.getFirstName());
-            userResponseDTO.setLastName(user.getLastName());
-            userResponseDTO.setUsername(user.getUsername());
-            userResponseDTOList.add(userResponseDTO);
-        }
+    @Autowired
+    ModelMapper modelMapper;
 
-        return userResponseDTOList;
+    @Override
+    public PagingResponseDTO getAllUser(Pageable pageable) {
+
+        Page<User> userPage = this.userRepository.findAllByIsDeleted(USER_IS_DELETED_FALSE, pageable)
+                .orElseThrow(() -> new RuntimeException("Can't get user by paging"));
+
+        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+        pagingResponseDTO.setPage(userPage.getNumber());
+        pagingResponseDTO.setTotalPages(userPage.getTotalPages());
+        pagingResponseDTO.setSize(userPage.getSize());
+        pagingResponseDTO.setTotalRecords(userPage.getTotalElements());
+
+        List<UserResponseDTO> userResponseDTOList = userPage.stream()
+                .map((user) -> this.modelMapper.map(user, UserResponseDTO.class)).collect(Collectors.toList());
+
+        pagingResponseDTO.setResponseObjectList(userResponseDTOList);
+
+        return pagingResponseDTO;
     }
 
     @Override
     public UserResponseDTO getUserById(Integer userId) {
 
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
-
         try {
-            Optional<User> user = userRepository.findById(userId);
-            if(user.isPresent() && user.get().getIsDeleted() == UserIsDeleteFalse) {
-                userResponseDTO.setId(user.get().getId());
-                userResponseDTO.setFirstName(user.get().getFirstName());
-                userResponseDTO.setLastName(user.get().getLastName());
-                userResponseDTO.setUsername(user.get().getUsername());
+            Optional<User> user = this.userRepository.findById(userId);
+            if(user.isPresent() && user.get().getIsDeleted() == USER_IS_DELETED_FALSE) {
+                return this.modelMapper.map(user.get(), UserResponseDTO.class);
             } else {
                 throw new NoSuchElementException("Can't find userId");
             }
@@ -59,13 +62,12 @@ public class UserServiceImpl implements UserService {
             ex.printStackTrace();
             return null;
         }
-        return userResponseDTO;
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public UserResponseDTO createUser(CreateUserRequestDTO createUserRequestDTO) {
 
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
         User user = new User();
 
         try {
@@ -78,7 +80,12 @@ public class UserServiceImpl implements UserService {
             if(createUserRequestDTO.getPassword().isEmpty()) {
                 throw new Exception("Password is required!");
             }
-            else {
+            if(createUserRequestDTO.getFirstName().isEmpty()) {
+                throw new Exception("First name is required!");
+            }
+            if(createUserRequestDTO.getLastName().isEmpty()) {
+                throw new Exception("Last name is required!");
+            } else {
                 user.setFirstName(createUserRequestDTO.getFirstName());
                 user.setLastName(createUserRequestDTO.getLastName());
                 user.setUsername(createUserRequestDTO.getUsername());
@@ -89,30 +96,26 @@ public class UserServiceImpl implements UserService {
                 if(user.getUpdatedDate() == null) {
                     user.setUpdatedDate(new Date());
                 }
-                user.setIsDeleted(ProductIsDeleteFalse);
-                userResponseDTO.setId(user.getId());
-                userResponseDTO.setFirstName(user.getFirstName());
-                userResponseDTO.setLastName(user.getLastName());
-                userResponseDTO.setUsername(user.getUsername());
+                user.setIsDeleted(USER_IS_DELETED_FALSE);
 
-                userRepository.save(user);
+                this.userRepository.save(user);
+
+                return this.modelMapper.map(user, UserResponseDTO.class);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
-
-        return userResponseDTO;
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public UpdateUserResponseDTO updateUser(Integer userId, UpdateUserRequestDTO updateUserRequestDTO) {
 
-        UpdateUserResponseDTO updateUserResponseDTO = new UpdateUserResponseDTO();
         Optional<User> user = this.userRepository.findById(userId);
 
         try {
-            if(user.isEmpty() || user.get().getIsDeleted() == UserIsDeleteTrue) {
+            if(user.isEmpty() || user.get().getIsDeleted() == USER_IS_DELETED_TRUE) {
                 throw new Exception("Can't find userId");
             }
             if(updateUserRequestDTO.getUsername().isEmpty()) {
@@ -126,29 +129,26 @@ public class UserServiceImpl implements UserService {
                 if(!user.get().getUsername().equals(updateUserRequestDTO.getUsername())) {
                     user.get().setUsername(updateUserRequestDTO.getUsername());
                 }
-                if(!user.get().getFirstName().equals(updateUserRequestDTO.getFirstName())) {
+                if(user.get().getFirstName() == null || !user.get().getFirstName().equals(updateUserRequestDTO.getFirstName())) {
                     user.get().setFirstName(updateUserRequestDTO.getFirstName());
                 }
-                if(!user.get().getLastName().equals(updateUserRequestDTO.getLastName())) {
+                if(user.get().getLastName() == null || !user.get().getLastName().equals(updateUserRequestDTO.getLastName())) {
                     user.get().setLastName(updateUserRequestDTO.getLastName());
                 }
                 user.get().setUpdatedDate(new Date());
-                updateUserResponseDTO.setId(user.get().getId());
-                updateUserResponseDTO.setFirstName(user.get().getFirstName());
-                updateUserResponseDTO.setLastName(user.get().getLastName());
-                updateUserResponseDTO.setUsername(user.get().getUsername());
 
                 userRepository.save(user.get());
+
+                return this.modelMapper.map(user.get(), UpdateUserResponseDTO.class);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
-
-        return updateUserResponseDTO;
     }
 
     @Override
+    @Transactional(rollbackFor = {IllegalArgumentException.class, Throwable.class})
     public Boolean deleteUser(Integer userId) {
 
         try {
@@ -161,7 +161,25 @@ public class UserServiceImpl implements UserService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            return false;
         }
-        return false;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {IllegalArgumentException.class, Throwable.class})
+    public Boolean deleteUserTemporarily(Integer userId) {
+        try {
+            Optional<User> user = this.userRepository.findById(userId);
+            if(user.isPresent() && user.get().getIsDeleted() == USER_IS_DELETED_FALSE) {
+                user.get().setIsDeleted(USER_IS_DELETED_TRUE);
+                this.userRepository.save(user.get());
+                return true;
+            } else {
+                throw new IllegalArgumentException("Can't find userId");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

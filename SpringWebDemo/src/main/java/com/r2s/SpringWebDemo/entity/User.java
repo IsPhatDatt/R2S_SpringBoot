@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -38,4 +39,10 @@ public class User {
 
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserAddress> addresses;
+
+//    @OneToMany(mappedBy = "user")
+//    private Set<Product> products;
 }

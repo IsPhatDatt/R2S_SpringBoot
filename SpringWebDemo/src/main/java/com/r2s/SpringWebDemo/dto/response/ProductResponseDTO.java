@@ -1,5 +1,6 @@
 package com.r2s.SpringWebDemo.dto.response;
 
+import com.r2s.SpringWebDemo.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,6 @@ public class ProductResponseDTO implements Serializable {
     private Double price;
 
     private Integer quantity;
+
+    private CategoryResponseDTO category;
 }

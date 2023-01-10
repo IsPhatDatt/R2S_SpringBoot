@@ -12,10 +12,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class UpdateUserRequestDTO implements Serializable {
 
-    @JsonProperty("firstNameUser")
+    @JsonProperty("firstNameForUser")
     private String firstName;
 
-    @JsonProperty("lastNameUser")
     private String lastName;
 
     private String username;

@@ -1,40 +1,41 @@
 package com.r2s.SpringWebDemo.constants;
 
 public class Constants {
-    public static final Boolean CategoryIsDeleteFalse  = false;
+    public static final Boolean CATEGORY_IS_DELETED_FALSE = false;
 
-    public static final Boolean ProductIsDeleteFalse  = false;
+    public static final Boolean PRODUCT_IS_DELETED_FALSE = false;
 
-    public static final Boolean UserIsDeleteFalse  = false;
+    public static final Boolean USER_IS_DELETED_FALSE = false;
 
-    public static final Boolean AddressIsDeleteFalse  = false;
+    public static final Boolean ADDRESS_IS_DELETED_FALSE = false;
 
-    public static final Boolean CartIsDeleteFalse  = false;
+    public static final Boolean CART_IS_DELETED_FALSE = false;
 
-    public static final Boolean OrderIsDeleteFalse  = false;
+    public static final Boolean ORDER_IS_DELETED_FALSE = false;
 
-    public static final Boolean CategoryIsDeleteTrue  = true;
+    public static final Boolean CATEGORY_IS_DELETED_TRUE = true;
 
-    public static final Boolean ProductIsDeleteTrue  = true;
+    public static final Boolean PRODUCT_IS_DELETED_TRUE = true;
 
-    public static final Boolean UserIsDeleteTrue  = true;
+    public static final Boolean USER_IS_DELETED_TRUE = true;
 
-    public static final Boolean AddressIsDeleteTrue  = true;
+    public static final Boolean ADDRESS_IS_DELETED_TRUE = true;
 
-    public static final Boolean CartIsDeleteTrue  = true;
+    public static final Boolean CART_IS_DELETED_TRUE = true;
 
-    public static final Boolean OrderIsDeleteTrue  = true;
+    public static final Boolean ORDER_IS_DELETED_TRUE = true;
 
-    public static final String CategoryIsDelete0  = "0";
+    public static final String CATEGORY_IS_DELETED_0 = "0";
 
-    public static final String ProductIsDelete0  = "0";
+    public static final String PRODUCT_IS_DELETED_0 = "0";
 
-    public static final String UserIsDelete0  = "0";
+    public static final String USER_IS_DELETED_0 = "0";
 
-    public static final String AddressIsDelete0  = "0";
+    public static final String ADDRESS_IS_DELETED_0 = "0";
 
-    public static final String CartIsDelete0  = "0";
+    public static final String CART_IS_DELETED_0 = "0";
 
-    public static final String OrderIsDelete0  = "0";
+    public static final String ORDER_IS_DELETED_0 = "0";
+
 
 }
