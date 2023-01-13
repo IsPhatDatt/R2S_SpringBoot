@@ -1,6 +1,5 @@
 package com.r2s.SpringWebDemo.dto.response;
 
-import com.r2s.SpringWebDemo.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +8,17 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCategoryResponseDTO implements Serializable {
+@NoArgsConstructor
+public class ProductOfUserResponseDTO implements Serializable {
 
     private Integer id;
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
+
+    private String username;
+
+    private Set<ProductResponseDTO> products;
 }

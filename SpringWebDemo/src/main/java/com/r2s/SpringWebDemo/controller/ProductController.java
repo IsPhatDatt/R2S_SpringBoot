@@ -8,6 +8,7 @@ import com.r2s.SpringWebDemo.dto.response.*;
 import com.r2s.SpringWebDemo.service.CategoryService;
 import com.r2s.SpringWebDemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +23,12 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @GetMapping(value = "/get-all-product")
-    public ResponseEntity getAllProduct(@RequestParam(value = "page", required = false) Integer page,
-                                         @RequestParam(value = "size", required = false) Integer size) {
-        PagingResponseDTO pagingProductResponseDTO = new PagingResponseDTO();
-        pagingProductResponseDTO.setResponseObjectList(productService.getAllProduct(page, size));
-        pagingProductResponseDTO.setPage(page);
-        pagingProductResponseDTO.setSize(size);
+    @GetMapping(value = "/get-all")
+    public ResponseEntity getAllProduct(Pageable pageable) {
 
-        return new ResponseEntity<>(pagingProductResponseDTO, HttpStatus.OK);
+        PagingResponseDTO pagingResponseDTO = productService.getAllProduct(pageable);
+
+        return new ResponseEntity<>(pagingResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{product-id}")
@@ -57,7 +55,7 @@ public class ProductController {
 
     @DeleteMapping("/{product-id}")
     public ResponseEntity deleteProduct(@PathVariable("product-id") Integer productId) {
-        this.productService.deleteProduct(productId);
+        this.productService.deleteProductTemporarily(productId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

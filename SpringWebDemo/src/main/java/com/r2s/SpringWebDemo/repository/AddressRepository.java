@@ -1,26 +1,21 @@
 package com.r2s.SpringWebDemo.repository;
 
 import com.r2s.SpringWebDemo.entity.Address;
-import com.r2s.SpringWebDemo.entity.Product;
+import com.r2s.SpringWebDemo.entity.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.r2s.SpringWebDemo.constants.Constants.AddressIsDelete0;
-import static com.r2s.SpringWebDemo.constants.Constants.ProductIsDelete0;
+import static com.r2s.SpringWebDemo.constants.Constants.ADDRESS_IS_DELETED_0;
 
 public interface AddressRepository extends CrudRepository<Address, Integer> {
 
-    List<Address> findByIsDeleted(Boolean isDeleted);
+    Optional<Page<Address>> findAllByIsDeleted(Boolean isDeleted, Pageable pageable);
 
-//    Boolean existsByName(String name);
-
-    @Query(value = "SELECT ID, ADDRESS, CREATED_DATE, UPDATED_DATE, IS_DELETED " +
-            "FROM ADDRESS " +
-            "WHERE IS_DELETED = " + AddressIsDelete0 + " " +
-            "ORDER BY ID " +
-            "OFFSET (:size * (:page - 1)) ROWS FETCH NEXT :size ROWS ONLY", nativeQuery = true)
-    List<Address> getAllAddress(@Param("page") Integer page, @Param("size") Integer size);
+    Optional<Page<Address>> findAll(Pageable pageable);
 }

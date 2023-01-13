@@ -11,5 +11,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class UpdateAddressRequestDTO implements Serializable {
 
-    private String addressFull;
+    private String apartmentNumber;
+
+    private String street;
+
+    private String ward;
+
+    private String district;
+
+    private String province;
 }

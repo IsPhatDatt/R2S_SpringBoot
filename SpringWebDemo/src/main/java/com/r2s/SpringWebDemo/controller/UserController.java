@@ -6,6 +6,7 @@ import com.r2s.SpringWebDemo.dto.response.*;
 import com.r2s.SpringWebDemo.service.CategoryService;
 import com.r2s.SpringWebDemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +22,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/get-all-user")
-    public ResponseEntity getAllUser(@RequestParam(value = "page", required = false) Integer page,
-                                     @RequestParam(value = "size", required = false) Integer size) {
-        PagingResponseDTO pagingUserResponseDTO = new PagingResponseDTO();
-        pagingUserResponseDTO.setResponseObjectList(userService.getAllUser(page, size));
-        pagingUserResponseDTO.setPage(page);
-        pagingUserResponseDTO.setSize(size);
+    @GetMapping(value = "/get-all")
+    public ResponseEntity getAllUser(Pageable pageable) {
 
-        return new ResponseEntity<>(pagingUserResponseDTO, HttpStatus.OK);
+        PagingResponseDTO pagingResponseDTO = userService.getAllUser(pageable);
+
+        return new ResponseEntity<>(pagingResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{user-id}")
@@ -41,6 +39,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity insertUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
+
         UserResponseDTO userResponseDTO = this.userService.createUser(createUserRequestDTO);
 
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
@@ -57,8 +56,22 @@ public class UserController {
 
     @DeleteMapping("/{user-id}")
     public ResponseEntity deleteUser(@PathVariable("user-id") Integer userId) {
-        this.userService.deleteUser(userId);
+        this.userService.deleteUserTemporarily(userId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{user-id}/products")
+    public ResponseEntity getProductByUserId(@PathVariable("user-id") Integer userId) {
+        ProductOfUserResponseDTO productOfUserResponseDTO = this.userService.getProductByUserId(userId);
+
+        return new ResponseEntity<>(productOfUserResponseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/{user-id}/addresses")
+    public ResponseEntity getAddressByUserId(@PathVariable("user-id") Integer userId) {
+        AddressOfUserResponseDTO addressOfUserResponseDTO = this.userService.getAddressByUserId(userId);
+
+        return new ResponseEntity<>(addressOfUserResponseDTO, HttpStatus.OK);
     }
 }

@@ -8,6 +8,7 @@ import com.r2s.SpringWebDemo.dto.response.*;
 import com.r2s.SpringWebDemo.entity.Category;
 import com.r2s.SpringWebDemo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,20 +23,17 @@ public class CategoryController implements Serializable {
     @Autowired
     CategoryService categoryService;
 
-    @GetMapping(value = "/get-all-category")
-    public ResponseEntity getAllCategory(@RequestParam(value = "page", required = false) Integer page,
-                                        @RequestParam(value = "size", required = false) Integer size) {
+    @GetMapping(value = "/get-all")
+    public ResponseEntity getAllCategory(Pageable pageable) {
 
-        PagingResponseDTO pagingCategoryResponseDTO = new PagingResponseDTO();
-        pagingCategoryResponseDTO.setResponseObjectList(categoryService.getAllCategory(page, size));
-        pagingCategoryResponseDTO.setPage(page);
-        pagingCategoryResponseDTO.setSize(size);
+        PagingResponseDTO pagingResponseDTO = categoryService.getAllCategory(pageable);
 
-        return new ResponseEntity<>(pagingCategoryResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(pagingResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{category-id}")
     public ResponseEntity getCategoryById(@PathVariable("category-id") Integer categoryId) {
+
         CategoryResponseDTO categoryResponse = this.categoryService.getCategoryById(categoryId);
 
         return new ResponseEntity<>(categoryResponse, HttpStatus.OK);
@@ -58,8 +56,15 @@ public class CategoryController implements Serializable {
 
     @DeleteMapping("/{category-id}")
     public ResponseEntity deleteCategory(@PathVariable("category-id") Integer categoryId) {
-        this.categoryService.deleteCategory(categoryId);
+        this.categoryService.deleteCategoryTemporarily(categoryId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{category-id}/products")
+    public ResponseEntity getProductByCategoryId(@PathVariable("category-id") Integer categoryId) {
+        ProductOfCategoryResponseDTO productOfCategoryResponseDTO = this.categoryService.getProductByCategoryId(categoryId);
+
+        return new ResponseEntity<>(productOfCategoryResponseDTO, HttpStatus.OK);
     }
 }

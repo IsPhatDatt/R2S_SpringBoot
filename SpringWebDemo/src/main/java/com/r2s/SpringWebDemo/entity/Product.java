@@ -1,17 +1,18 @@
 package com.r2s.SpringWebDemo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "PRODUCT")
-public class Product {
+@Entity
+@Table(name = "PRODUCT")
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +36,12 @@ public class Product {
 
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID",  referencedColumnName = "id", nullable = false)
+    private Employer userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "id", nullable = false)
+    private Category categoryId;
 }

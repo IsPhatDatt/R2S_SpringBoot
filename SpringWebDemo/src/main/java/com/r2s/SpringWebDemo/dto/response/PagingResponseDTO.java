@@ -15,10 +15,11 @@ public class PagingResponseDTO implements Serializable {
 
     private Integer page;
 
+    private Integer totalPages;
+
     private Integer size;
 
-    private String sort;
+    private Long totalRecords;
 
-    @JsonProperty("data-list")
     private List<?> responseObjectList;
 }

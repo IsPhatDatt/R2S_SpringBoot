@@ -8,6 +8,7 @@ import com.r2s.SpringWebDemo.dto.response.*;
 import com.r2s.SpringWebDemo.service.AddressService;
 import com.r2s.SpringWebDemo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,15 +24,12 @@ public class AddressController {
     @Autowired
     AddressService addressService;
 
-    @GetMapping(value = "/get-all-address")
-    public ResponseEntity getAllAddress(@RequestParam(value = "page", required = false) Integer page,
-                                     @RequestParam(value = "size", required = false) Integer size) {
-        PagingResponseDTO pagingAddressResponseDTO = new PagingResponseDTO();
-        pagingAddressResponseDTO.setResponseObjectList(addressService.getAllAddress(page, size));
-        pagingAddressResponseDTO.setPage(page);
-        pagingAddressResponseDTO.setSize(size);
+    @GetMapping(value = "/get-all")
+    public ResponseEntity getAllAddress(Pageable pageable) {
 
-        return new ResponseEntity<>(pagingAddressResponseDTO, HttpStatus.OK);
+        PagingResponseDTO pagingResponseDTO = addressService.getAllAddress(pageable);
+
+        return new ResponseEntity<>(pagingResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{address-id}")
@@ -58,7 +56,7 @@ public class AddressController {
 
     @DeleteMapping("/{address-id}")
     public ResponseEntity deleteAddress(@PathVariable("address-id") Integer addressId) {
-        this.addressService.deleteAddress(addressId);
+        this.addressService.deleteAddressTemporarily(addressId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

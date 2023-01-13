@@ -1,34 +1,27 @@
 package com.r2s.SpringWebDemo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-@Entity(name = "\"USER\"")
-public class User {
+@AllArgsConstructor
+@Entity(name = "BILL")
+public class Bill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "FIRST_NAME")
-    private String firstName;
+    @Column(name = "TRANSPORTATION_FEE")
+    private Double transportationFee;
 
-    @Column(name = "LAST_NAME")
-    private String lastName;
-
-    @Column(name = "USERNAME")
-    private String username;
-
-    @Column(name = "PASSWORD")
-    private String password;
+    @Column(name = "TOTAL_PRICE")
+    private Double totalPrice;
 
     @Column(name = "CREATED_DATE")
     private Date createdDate;
