@@ -98,12 +98,11 @@ public class ProductServiceImpl implements ProductService {
                     product.setUpdatedDate(new Date());
                 }
                 product.setIsDeleted(PRODUCT_IS_DELETED_FALSE);
-                product.setCategory(category);
+                product.setCategoryId(category);
 
                 this.productRepository.save(product);
 
                 ProductResponseDTO productResponseDTO = this.modelMapper.map(product, ProductResponseDTO.class);
-                productResponseDTO.setCategory(categoryResponseDTO);
                 return productResponseDTO;
             }
         } catch (Exception ex) {
@@ -145,9 +144,9 @@ public class ProductServiceImpl implements ProductService {
                         if(!product.getQuantity().equals(updateProductRequestDTO.getQuantity())) {
                             product.setQuantity(updateProductRequestDTO.getQuantity());
                         }
-                        if(!product.getCategory().getId()
+                        if(!product.getCategoryId().getId()
                                 .equals(updateProductRequestDTO.getCategory().getId())) {
-                            product.setCategory(category);
+                            product.setCategoryId(category);
                         }
                         product.setUpdatedDate(new Date());
 

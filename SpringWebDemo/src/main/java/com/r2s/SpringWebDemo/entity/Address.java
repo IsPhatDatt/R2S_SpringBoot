@@ -1,17 +1,17 @@
 package com.r2s.SpringWebDemo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "ADDRESS")
+@Entity
+@Table(name = "ADDRESS")
 public class Address {
 
     @Id
@@ -43,6 +43,6 @@ public class Address {
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
 
-    @OneToMany(mappedBy = "address")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "addressId")
     private Set<UserAddress> users;
 }

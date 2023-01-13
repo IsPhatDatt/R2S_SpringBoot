@@ -9,13 +9,16 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "CART")
-public class Cart {
+@Entity(name = "BILL")
+public class Bill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
+
+    @Column(name = "TRANSPORTATION_FEE")
+    private Double transportationFee;
 
     @Column(name = "TOTAL_PRICE")
     private Double totalPrice;

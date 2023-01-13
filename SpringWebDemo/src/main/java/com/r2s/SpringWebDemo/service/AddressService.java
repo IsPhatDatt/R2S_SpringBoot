@@ -19,4 +19,6 @@ public interface AddressService {
     Boolean deleteAddress(Integer addressId);
 
     Boolean deleteAddressTemporarily(Integer addressId);
+
+
 }

@@ -19,6 +19,4 @@ public class ProductResponseDTO implements Serializable {
     private Double price;
 
     private Integer quantity;
-
-    private CategoryResponseDTO category;
 }

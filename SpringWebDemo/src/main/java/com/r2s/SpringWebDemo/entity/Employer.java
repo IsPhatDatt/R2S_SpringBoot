@@ -1,18 +1,18 @@
 package com.r2s.SpringWebDemo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "\"USER\"")
-public class User {
+@Entity
+@Table(name = "EMPLOYER")
+public class Employer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +40,9 @@ public class User {
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userId")
     private Set<UserAddress> addresses;
 
-//    @OneToMany(mappedBy = "user")
-//    private Set<Product> products;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userId")
+    private Set<Product> products;
 }

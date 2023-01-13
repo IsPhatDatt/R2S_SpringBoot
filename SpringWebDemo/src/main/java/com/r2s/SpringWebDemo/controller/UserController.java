@@ -60,4 +60,18 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/{user-id}/products")
+    public ResponseEntity getProductByUserId(@PathVariable("user-id") Integer userId) {
+        ProductOfUserResponseDTO productOfUserResponseDTO = this.userService.getProductByUserId(userId);
+
+        return new ResponseEntity<>(productOfUserResponseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/{user-id}/addresses")
+    public ResponseEntity getAddressByUserId(@PathVariable("user-id") Integer userId) {
+        AddressOfUserResponseDTO addressOfUserResponseDTO = this.userService.getAddressByUserId(userId);
+
+        return new ResponseEntity<>(addressOfUserResponseDTO, HttpStatus.OK);
+    }
 }

@@ -22,4 +22,8 @@ public interface UserService {
     Boolean deleteUser(Integer userId);
 
     Boolean deleteUserTemporarily(Integer userId);
+
+    ProductOfUserResponseDTO getProductByUserId(Integer userId);
+
+    AddressOfUserResponseDTO getAddressByUserId(Integer userId);
 }

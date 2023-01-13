@@ -1,11 +1,9 @@
 package com.r2s.SpringWebDemo.service.impl;
 
 import com.r2s.SpringWebDemo.dto.request.CreateOrderRequestDTO;
-import com.r2s.SpringWebDemo.dto.response.CategoryResponseDTO;
 import com.r2s.SpringWebDemo.dto.response.OrderResponseDTO;
 import com.r2s.SpringWebDemo.dto.response.PagingResponseDTO;
-import com.r2s.SpringWebDemo.entity.Category;
-import com.r2s.SpringWebDemo.entity.Order;
+import com.r2s.SpringWebDemo.entity.Bill;
 import com.r2s.SpringWebDemo.repository.OrderRepository;
 import com.r2s.SpringWebDemo.service.OrderService;
 import org.modelmapper.ModelMapper;
@@ -32,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public PagingResponseDTO getAllOrder(Pageable pageable) {
 
-        Page<Order> orderPage = this.orderRepository.findAllByIsDeleted(ORDER_IS_DELETED_FALSE, pageable)
+        Page<Bill> orderPage = this.orderRepository.findAllByIsDeleted(ORDER_IS_DELETED_FALSE, pageable)
                 .orElseThrow(() -> new RuntimeException("Can't get order by paging"));
 
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
@@ -42,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
         pagingResponseDTO.setTotalRecords(orderPage.getTotalElements());
 
         List<OrderResponseDTO> orderResponseDTOS = orderPage.stream()
-                .map((order) -> this.modelMapper.map(order, OrderResponseDTO.class)).collect(Collectors.toList());
+                .map((bill) -> this.modelMapper.map(bill, OrderResponseDTO.class)).collect(Collectors.toList());
 
         pagingResponseDTO.setResponseObjectList(orderResponseDTOS);
 
@@ -53,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO getOrderById(Integer orderId) {
 
         try {
-            Optional<Order> order = this.orderRepository.findById(orderId);
+            Optional<Bill> order = this.orderRepository.findById(orderId);
             if(order.isPresent() && order.get().getIsDeleted() == ORDER_IS_DELETED_FALSE) {
                 return this.modelMapper.map(order.get(), OrderResponseDTO.class);
             } else {
@@ -69,29 +67,29 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public OrderResponseDTO createOrder(CreateOrderRequestDTO createOrderRequestDTO) {
 
-        Order order = new Order();
+        Bill bill = new Bill();
 
         try {
             if(createOrderRequestDTO.getTotalPrice() == null) {
-                throw new Exception("Order total price is not null!");
+                throw new Exception("Bill total price is not null!");
             }
             if(createOrderRequestDTO.getTransportationFee() == null) {
-                throw new Exception("Order transportation fee is not null!");
+                throw new Exception("Bill transportation fee is not null!");
             }
             else {
-                order.setTotalPrice(createOrderRequestDTO.getTotalPrice());
-                order.setTransportationFee(createOrderRequestDTO.getTransportationFee());
-                if(order.getCreatedDate() == null) {
-                    order.setCreatedDate(new Date());
+                bill.setTotalPrice(createOrderRequestDTO.getTotalPrice());
+                bill.setTransportationFee(createOrderRequestDTO.getTransportationFee());
+                if(bill.getCreatedDate() == null) {
+                    bill.setCreatedDate(new Date());
                 }
-                if(order.getUpdatedDate() == null) {
-                    order.setUpdatedDate(new Date());
+                if(bill.getUpdatedDate() == null) {
+                    bill.setUpdatedDate(new Date());
                 }
-                order.setIsDeleted(ORDER_IS_DELETED_FALSE);
+                bill.setIsDeleted(ORDER_IS_DELETED_FALSE);
 
-                this.orderRepository.save(order);
+                this.orderRepository.save(bill);
 
-                return this.modelMapper.map(order, OrderResponseDTO.class);
+                return this.modelMapper.map(bill, OrderResponseDTO.class);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -120,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
     public Boolean deleteOrderTemporarily(Integer orderId) {
 
         try {
-            Optional<Order> order = this.orderRepository.findById(orderId);
+            Optional<Bill> order = this.orderRepository.findById(orderId);
             if(order.isPresent() && order.get().getIsDeleted() == ORDER_IS_DELETED_FALSE) {
                 order.get().setIsDeleted(ORDER_IS_DELETED_TRUE);
                 this.orderRepository.save(order.get());

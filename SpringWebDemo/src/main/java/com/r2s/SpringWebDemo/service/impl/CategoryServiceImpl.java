@@ -170,6 +170,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductOfCategoryResponseDTO getProductByCategoryId(Integer cateId) {
 
         try {
@@ -182,11 +183,12 @@ public class CategoryServiceImpl implements CategoryService {
                     throw new Exception("The category is unavailable!");
                 } else {
                     Set<Product> products = category.getProducts();
-                    Set<ProductResponseDTO> productResponseDTOList = products.stream()
-                            .map((product) -> this.modelMapper.map(product, ProductResponseDTO.class)).collect(Collectors.toSet());
+                    Set<ProductResponseDTO> productResponseDTOSet = products.stream()
+                            .map((product) -> this.modelMapper.map(product, ProductResponseDTO.class))
+                            .collect(Collectors.toSet());
 
                     ProductOfCategoryResponseDTO productOfCategoryResponseDTO = this.modelMapper.map(category, ProductOfCategoryResponseDTO.class);
-//                    productOfCategoryResponseDTO.setProducts(productResponseDTOList);
+                    productOfCategoryResponseDTO.setProducts(productResponseDTOSet);
                     return productOfCategoryResponseDTO;
                 }
             }

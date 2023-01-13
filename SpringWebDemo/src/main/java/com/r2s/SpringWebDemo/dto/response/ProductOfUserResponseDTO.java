@@ -5,17 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductOfCategoryResponseDTO implements Serializable {
+public class ProductOfUserResponseDTO implements Serializable {
 
     private Integer id;
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
+
+    private String username;
 
     private Set<ProductResponseDTO> products;
 }
