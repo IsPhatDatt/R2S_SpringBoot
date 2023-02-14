@@ -1,28 +1,30 @@
 package com.r2s.SpringWebDemo.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
+import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-@Entity(name = "\"ORDER\"")
-public class Order {
+@NoArgsConstructor
+@Entity
+@Table(name = "ROLE")
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "TRANSPORTATION_FEE")
-    private Double transportationFee;
-
-    @Column(name = "TOTAL_PRICE")
-    private Double totalPrice;
+    @Column(name = "AUTHORITY", unique = true)
+    private String authority;
 
     @Column(name = "CREATED_DATE")
     private Date createdDate;
@@ -32,4 +34,8 @@ public class Order {
 
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<Employer> users;
+
 }

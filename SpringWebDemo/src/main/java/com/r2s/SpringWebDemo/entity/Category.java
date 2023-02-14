@@ -1,12 +1,13 @@
 package com.r2s.SpringWebDemo.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -34,7 +35,7 @@ public class Category implements Serializable {
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "categoryId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private Set<Product> products;
 
 }

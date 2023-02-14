@@ -1,8 +1,8 @@
 package com.r2s.SpringWebDemo.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
@@ -43,6 +43,6 @@ public class Address {
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "addressId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
     private Set<UserAddress> users;
 }

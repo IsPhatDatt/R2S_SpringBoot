@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
                     product.setUpdatedDate(new Date());
                 }
                 product.setIsDeleted(PRODUCT_IS_DELETED_FALSE);
-                product.setCategoryId(category);
+                product.setCategory(category);
 
                 this.productRepository.save(product);
 
@@ -144,9 +144,9 @@ public class ProductServiceImpl implements ProductService {
                         if(!product.getQuantity().equals(updateProductRequestDTO.getQuantity())) {
                             product.setQuantity(updateProductRequestDTO.getQuantity());
                         }
-                        if(!product.getCategoryId().getId()
+                        if(!product.getCategory().getId()
                                 .equals(updateProductRequestDTO.getCategory().getId())) {
-                            product.setCategoryId(category);
+                            product.setCategory(category);
                         }
                         product.setUpdatedDate(new Date());
 

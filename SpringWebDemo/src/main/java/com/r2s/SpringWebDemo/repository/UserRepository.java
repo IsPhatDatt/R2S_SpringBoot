@@ -5,7 +5,9 @@ import com.r2s.SpringWebDemo.entity.Employer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<Employer, Integer> {
@@ -15,4 +17,6 @@ public interface UserRepository extends CrudRepository<Employer, Integer> {
     Boolean existsByUsername(String username);
 
     Optional<Page<Category>> findAll(Pageable pageable);
+
+    Employer findByUserName(String username);
 }

@@ -1,8 +1,8 @@
 package com.r2s.SpringWebDemo.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
@@ -40,9 +40,17 @@ public class Employer {
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<UserAddress> addresses;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Product> products;
+
+    @ManyToMany
+    @JoinTable(
+            name = "USER_ROLE",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
+    )
+    private Set<Role> roles;
 }

@@ -1,21 +1,27 @@
 package com.r2s.SpringWebDemo.service.impl;
 
+import com.r2s.SpringWebDemo.config.JwtTokenUtil;
 import com.r2s.SpringWebDemo.dto.request.CreateUserRequestDTO;
+import com.r2s.SpringWebDemo.dto.request.LoginRequest;
+import com.r2s.SpringWebDemo.dto.request.RegisterRequest;
 import com.r2s.SpringWebDemo.dto.request.UpdateUserRequestDTO;
 import com.r2s.SpringWebDemo.dto.response.*;
-import com.r2s.SpringWebDemo.entity.Address;
-import com.r2s.SpringWebDemo.entity.Employer;
-import com.r2s.SpringWebDemo.entity.Product;
-import com.r2s.SpringWebDemo.entity.UserAddress;
+import com.r2s.SpringWebDemo.entity.*;
 import com.r2s.SpringWebDemo.repository.AddressRepository;
+import com.r2s.SpringWebDemo.repository.RoleRepository;
 import com.r2s.SpringWebDemo.repository.UserRepository;
 import com.r2s.SpringWebDemo.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,13 +32,22 @@ import static com.r2s.SpringWebDemo.constants.Constants.*;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    AddressRepository addressRepository;
+    private AddressRepository addressRepository;
 
     @Autowired
-    ModelMapper modelMapper;
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public PagingResponseDTO getAllUser(Pageable pageable) {
@@ -245,5 +260,30 @@ public class UserServiceImpl implements UserService {
                 return addressOfUserResponseDTO;
             }
         }
+    }
+
+    @Override
+    public String login(LoginRequest authenticationRequest) {
+        Employer user = userRepository.findByUserName(authenticationRequest.getUsername());
+
+        if(ObjectUtils.isEmpty(user)){
+            throw new UsernameNotFoundException("User Not Found Exception");
+        } else {
+            if(!passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword())){
+                throw new AuthenticationServiceException("Wrong password");
+            }
+        }
+        return jwtTokenUtil.generateToken(user);
+    }
+
+    @Override
+    public Employer register(RegisterRequest registerRequest) {
+        String password = registerRequest.getPassword();
+        String cypherText = passwordEncoder.encode(password);
+        Employer user = new Employer();
+        user.setUsername(registerRequest.getUserName());
+        user.setPassword(cypherText);
+        user.setRoles((Set<Role>) roleRepository.findByName("CUSTOMER"));
+        return user;
     }
 }
