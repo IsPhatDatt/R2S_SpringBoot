@@ -3,7 +3,6 @@ package com.r2s.SpringWebDemo.mapper;
 import com.r2s.SpringWebDemo.dto.response.CategoryResponseDTO;
 import com.r2s.SpringWebDemo.dto.response.UpdateCategoryResponseDTO;
 import com.r2s.SpringWebDemo.entity.Category;
-import jakarta.persistence.Entity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

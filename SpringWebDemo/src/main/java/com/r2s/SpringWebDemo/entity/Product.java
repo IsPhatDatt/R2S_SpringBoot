@@ -1,8 +1,11 @@
 package com.r2s.SpringWebDemo.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -37,11 +40,11 @@ public class Product implements Serializable {
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID",  referencedColumnName = "id", nullable = false)
-    private Employer userId;
+    private Employer user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "id", nullable = false)
-    private Category categoryId;
+    private Category category;
 }
